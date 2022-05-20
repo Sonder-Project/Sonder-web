@@ -6,7 +6,7 @@
 // return the Authorization header with the accessToken, othersize return an empty object
 export default function authHeader() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  if (user && user.accessToken) {
+  if (JSON.stringify(user) !== '{}' && user.accessToken) {   // todo - security
     return { Authorization: 'Bearer ' + user.accessToken };
   }
   else {
