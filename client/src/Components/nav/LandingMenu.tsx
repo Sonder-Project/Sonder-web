@@ -17,6 +17,7 @@ export const LandingMenu: React.FC = () => {
         <Link to="/chat"><MenuItem>Chat</MenuItem></Link>
         <Link to="/tokenomics"><MenuItem >Tokenomics</MenuItem></Link>
         <Link to="/events"><MenuItem>Events</MenuItem></Link>
+        <Link to="/profile"><MenuItem>Profile</MenuItem></Link>
       </MenuList>
     </Menu>
   );

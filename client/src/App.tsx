@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import { Chat } from './Pages/Chat';
 import Tokenomics from './Pages/Tokenomics';
 import Events from './Pages/Events';
+import Profile from './Pages/Profile';
 
 import Signup from './Pages/Signup';
 
@@ -33,6 +34,8 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/tokenomics' element={<Tokenomics />} />
           <Route path='/events' element={<Events />} />
+          <Route path='/profile' element={<Profile />} />
+
         </Routes>
 
 

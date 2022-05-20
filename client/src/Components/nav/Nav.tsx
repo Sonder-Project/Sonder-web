@@ -71,6 +71,7 @@ export const Nav: React.FC<{}> = () => {
             <Link to="/chat"><Text fontSize="xl">Chat</Text></Link>
             <Link to="/tokenomics"><Text fontSize="xl">Tokenomics</Text></Link>
             <Link to="/events"><Text fontSize="xl">Events</Text></Link>
+            <Link to="/profile"><Text fontSize="xl">Profile</Text></Link>
             {/* 
             <NextLink
               href="https://portal.thirdweb.com"
