@@ -32,7 +32,7 @@ export const Nav: React.FC<{}> = () => {
     33,
   );
 
-
+  const user = JSON.parse(localStorage.getItem("user") || "{}");  // todo - useEffect
 
 
   return (
@@ -71,7 +71,10 @@ export const Nav: React.FC<{}> = () => {
             <Link to="/chat"><Text fontSize="xl">Chat</Text></Link>
             <Link to="/tokenomics"><Text fontSize="xl">Tokenomics</Text></Link>
             <Link to="/events"><Text fontSize="xl">Events</Text></Link>
-            <Link to="/profile"><Text fontSize="xl">Profile</Text></Link>
+            {JSON.stringify(user) !== '{}' && user.accessToken ?
+              <Link to="/profile"><Text fontSize="xl">Profile</Text></Link> :
+              <Link to="/login"><Text fontSize="xl">Login</Text></Link>
+            }
             {/* 
             <NextLink
               href="https://portal.thirdweb.com"

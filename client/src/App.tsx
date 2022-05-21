@@ -8,6 +8,7 @@ import Events from './Pages/Events';
 import Profile from './Pages/Profile';
 
 import Signup from './Pages/Signup';
+import LoginPage from './Pages/Login';
 
 import {
   BrowserRouter,
@@ -35,6 +36,7 @@ function App() {
           <Route path='/tokenomics' element={<Tokenomics />} />
           <Route path='/events' element={<Events />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/login' element={<LoginPage />} />
 
         </Routes>
 

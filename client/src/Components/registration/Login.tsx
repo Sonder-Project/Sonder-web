@@ -12,16 +12,33 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { login } from "../../actions/auth";
+
+
 
 interface IUser {
   email: String;
   password: String;
 }
 
-export default function Login() {
+export default function Login(props: any) {
+  const { isLoggedIn } = useSelector((state: any) => state.auth);
+  const { message } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
+
+  const color1 = useColorModeValue('gray.50', 'gray.800');
+  const color2 = useColorModeValue('white', 'gray.700');
+
+  const form = useRef();
+  const checkBtn = useRef();
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IUser>();
 
   const headers: Readonly<Record<string, string | boolean>> = {
@@ -32,6 +49,17 @@ export default function Login() {
   };
 
   const onSubmit: SubmitHandler<IUser> = data => {
+    setLoading(true);
+    dispatch(login(data))
+      .then(() => {
+        props.history.push("/profile");
+        window.location.reload();
+      })
+      .catch(() => {
+        setLoading(false);
+        console.log("error in login dispatch");
+      });
+
     /*
     axios.post('http://localhost:8080/login', data, headers)
       .then(function (res) {
@@ -41,22 +69,16 @@ export default function Login() {
         console.log(err);
       });
       */
-    console.log("reach");
-    axios.get('http://localhost:8080/login')
-      .then(function (res) {
-        console.log(res);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
   }
-
+  if (isLoggedIn) {
+    return <Navigate to="/profile" />
+  }
   return (
     <Flex
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+      bg={color1}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
@@ -66,16 +88,16 @@ export default function Login() {
         </Stack>
         <Box
           rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
+          bg={color2}
           boxShadow={'lg'}
           p={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
-              <FormControl id="email">
+              <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input type="email" {...register('email')} />
               </FormControl>
-              <FormControl id="password">
+              <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <Input type="password" {...register('password')} />
               </FormControl>

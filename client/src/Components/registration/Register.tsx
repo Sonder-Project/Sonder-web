@@ -1,3 +1,4 @@
+import React, { useState, useRef } from "react";
 import {
   Flex,
   Box,
@@ -14,12 +15,13 @@ import {
   useColorModeValue,
   Link,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 
+import { useDispatch, useSelector } from "react-redux";
+import { registerAction } from "../../actions/auth";
 
 interface IUser {
   firstName: String;
@@ -30,9 +32,13 @@ interface IUser {
   active: boolean;
 }
 
-export default function Register() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IUser>();
+
+  const [successful, setSuccessful] = useState(false);
+  const { message } = useSelector((state: any) => state.message);
+  const dispatch = useDispatch();
 
   const headers: Readonly<Record<string, string | boolean>> = {
     Accept: "application/json",
@@ -44,7 +50,16 @@ export default function Register() {
   const onSubmit: SubmitHandler<IUser> = data => {
     data["roles"] = "USER";
     data["active"] = true;
-    console.log(data);
+    setSuccessful(false);
+    dispatch(registerAction(data))
+      .then(() => {
+        setSuccessful(true);
+      })
+      .catch(() => {
+        setSuccessful(false);
+      });
+
+
     axios.post('http://localhost:8080/process_register', data, headers)
       .then(function (res) {
         console.log(res);
@@ -92,7 +107,7 @@ export default function Register() {
               </HStack>
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" {...register('email')} />
+                <Input type="email"  {...register('email')} />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>

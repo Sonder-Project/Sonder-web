@@ -27,7 +27,7 @@ interface IUserLogin {
   password: String;
 }
 
-export const register: SubmitHandler<IUserRegister> = data => (dispatch: any) => {
+export const registerAction: SubmitHandler<IUserRegister> = data => (dispatch: any) => {
   return authService.register(data).then(
     (res: any) => {
       dispatch({
