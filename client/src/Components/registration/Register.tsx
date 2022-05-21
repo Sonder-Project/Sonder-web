@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Flex,
   Box,
@@ -16,9 +16,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { registerAction } from "../../actions/auth";
@@ -40,17 +38,13 @@ export default function RegisterPage() {
   const { message } = useSelector((state: any) => state.message);
   const dispatch = useDispatch();
 
-  const headers: Readonly<Record<string, string | boolean>> = {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
-    "Access-Control-Allow-Credentials": true,
-    "X-Requested-With": "XMLHttpRequest",
-  };
+  const inputRef = useRef<any>();
 
   const onSubmit: SubmitHandler<IUser> = data => {
+    setSuccessful(false);
+
     data["roles"] = "USER";
     data["active"] = true;
-    setSuccessful(false);
     dispatch(registerAction(data))
       .then(() => {
         setSuccessful(true);
@@ -58,16 +52,12 @@ export default function RegisterPage() {
       .catch(() => {
         setSuccessful(false);
       });
-
-
-    axios.post('http://localhost:8080/process_register', data, headers)
-      .then(function (res) {
-        console.log(res);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
   }
+
+  useEffect(() => {
+    //focus the input element 
+    inputRef.current?.focus();
+  }, [])
 
   return (
     <Flex
@@ -90,61 +80,71 @@ export default function RegisterPage() {
           boxShadow={'lg'}
           p={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="firstName" isRequired>
-                    <FormLabel>First Name</FormLabel>
-                    <Input type="text" {...register('firstName')} />
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl id="lastName" isRequired>
-                    <FormLabel>Last Name</FormLabel>
-                    <Input type="text" {...register('lastName')} />
-                  </FormControl>
-                </Box>
-              </HStack>
-              <FormControl id="email" isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input type="email"  {...register('email')} />
-              </FormControl>
-              <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'} {...register('password')} />
-                  <InputRightElement h={'full'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }>
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
+            {!successful ?
+              <Stack spacing={4}>
+                <HStack>
+                  <Box>
+                    <FormControl id="firstName" isRequired>
+                      <FormLabel>First Name</FormLabel>
+                      <Input type="text" {...register('firstName')} ref={inputRef} />
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <FormControl id="lastName" isRequired>
+                      <FormLabel>Last Name</FormLabel>
+                      <Input type="text" {...register('lastName')} />
+                    </FormControl>
+                  </Box>
+                </HStack>
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email address</FormLabel>
+                  <Input type="email"  {...register('email')} />
+                </FormControl>
+                <FormControl id="password" isRequired>
+                  <FormLabel>Password</FormLabel>
+                  <InputGroup>
+                    <Input type={showPassword ? 'text' : 'password'} {...register('password')} />
+                    <InputRightElement h={'full'}>
+                      <Button
+                        variant={'ghost'}
+                        onClick={() =>
+                          setShowPassword((showPassword) => !showPassword)
+                        }>
+                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
 
-              <Stack spacing={10} pt={2}>
-                <Button
-                  type="submit"
-                  isLoading={isSubmitting}
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}>
-                  Sign up
-                </Button>
+                <Stack spacing={10} pt={2}>
+                  <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    loadingText="Submitting"
+                    size="lg"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}>
+                    Sign up
+                  </Button>
+                </Stack>
+                <Stack pt={6}>
+                  <Text align={'center'}>
+                    Already a user? <Link color={'blue.400'}>Login</Link>
+                  </Text>
+                </Stack>
               </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
-                </Text>
-              </Stack>
-            </Stack>
+              :
+              message && (
+                <div className="form-group">
+                  <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
+                    {message}
+                  </div>
+                </div>
+              )
+            }
           </form>
         </Box>
       </Stack>
