@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import { Nav } from './Components/nav/Nav';
 import Home from './Pages/Home';
@@ -16,19 +15,15 @@ import {
   Route,
 } from "react-router-dom";
 
-
 import { Box } from '@chakra-ui/react';
 
 function App() {
   return (
     <BrowserRouter>
-
       <div className="App">
-
         <Box position="relative">
           <Nav />
         </Box>
-
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/chat' element={<Chat />} />
@@ -37,11 +32,7 @@ function App() {
           <Route path='/events' element={<Events />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/login' element={<LoginPage />} />
-
         </Routes>
-
-
-
       </div >
     </BrowserRouter>
   );

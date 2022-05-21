@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { login } from "../../actions/auth";
@@ -36,8 +36,8 @@ export default function Login(props: any) {
   const color1 = useColorModeValue('gray.50', 'gray.800');
   const color2 = useColorModeValue('white', 'gray.700');
 
-  const form = useRef();
-  const checkBtn = useRef();
+  const inputRef = useRef<any>();
+
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IUser>();
 
@@ -50,6 +50,7 @@ export default function Login(props: any) {
 
   const onSubmit: SubmitHandler<IUser> = data => {
     setLoading(true);
+
     dispatch(login(data))
       .then(() => {
         props.history.push("/profile");
@@ -59,7 +60,6 @@ export default function Login(props: any) {
         setLoading(false);
         console.log("error in login dispatch");
       });
-
     /*
     axios.post('http://localhost:8080/login', data, headers)
       .then(function (res) {
@@ -70,6 +70,13 @@ export default function Login(props: any) {
       });
       */
   }
+
+  useEffect(() => {
+    //focus the input element 
+    inputRef.current?.focus();
+  }, [])
+
+
   if (isLoggedIn) {
     return <Navigate to="/profile" />
   }
@@ -91,11 +98,11 @@ export default function Login(props: any) {
           bg={color2}
           boxShadow={'lg'}
           p={8}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} >
             <Stack spacing={4}>
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" {...register('email')} />
+                <Input type="email" {...register('email')} ref={inputRef} />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
