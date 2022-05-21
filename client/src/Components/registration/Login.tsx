@@ -11,14 +11,13 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Spinner
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { login } from "../../actions/auth";
-
 
 
 interface IUser {
@@ -28,7 +27,7 @@ interface IUser {
 
 export default function Login(props: any) {
   const { isLoggedIn } = useSelector((state: any) => state.auth);
-  const { message } = useSelector((state: any) => state.auth);
+  const { message } = useSelector((state: any) => state.message);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -37,16 +36,7 @@ export default function Login(props: any) {
   const color2 = useColorModeValue('white', 'gray.700');
 
   const inputRef = useRef<any>();
-
-
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IUser>();
-
-  const headers: Readonly<Record<string, string | boolean>> = {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
-    "Access-Control-Allow-Credentials": true,
-    "X-Requested-With": "XMLHttpRequest",
-  };
 
   const onSubmit: SubmitHandler<IUser> = data => {
     setLoading(true);
@@ -60,22 +50,12 @@ export default function Login(props: any) {
         setLoading(false);
         console.log("error in login dispatch");
       });
-    /*
-    axios.post('http://localhost:8080/login', data, headers)
-      .then(function (res) {
-        console.log(res);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-      */
   }
 
   useEffect(() => {
     //focus the input element 
     inputRef.current?.focus();
   }, [])
-
 
   if (isLoggedIn) {
     return <Navigate to="/profile" />
@@ -124,8 +104,19 @@ export default function Login(props: any) {
                   _hover={{
                     bg: 'blue.500',
                   }}>
-                  Sign in
+                  {loading ?
+                    <Spinner />
+                    :
+                    <span>Sign in</span>
+                  }
                 </Button>
+                {message && ( // if there is an error message, display it
+                  <div className="form-group">
+                    <div className="alert alert-danger" role="alert">
+                      {message}
+                    </div>
+                  </div>
+                )}
               </Stack>
             </Stack>
           </form>
