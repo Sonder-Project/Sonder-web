@@ -10,14 +10,29 @@ import {
   Badge,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 export default function ProfileCard() {
+  const { user: currentUser } = useSelector((state: any) => state.auth);
+  console.log("current!!!!", currentUser);
+
+  const color1 = useColorModeValue('white', 'gray.900');
+  const color2 = useColorModeValue('gray.700', 'gray.400');
+  const color3 = useColorModeValue('gray.50', 'gray.800');
+
+
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Center py={6}>
       <Box
         maxW={'320px'}
         w={'full'}
-        bg={useColorModeValue('white', 'gray.900')}
+        bg={color1}
         boxShadow={'2xl'}
         rounded={'lg'}
         p={6}
@@ -50,32 +65,32 @@ export default function ProfileCard() {
         </Text>
         <Text
           textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
+          color={color2}
           px={3}>
-          Programmer, VC, Philanthropist, and Futurist
+          Hello, I'm JL. I'm building something.
         </Text>
 
         <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
+            bg={color3}
             fontWeight={'400'}>
             #VC
           </Badge>
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
+            bg={color3}
             fontWeight={'400'}>
             #CS
           </Badge>
           <Badge
             px={2}
             py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
+            bg={color3}
             fontWeight={'400'}>
-            #Effective Altruism
+            #EA
           </Badge>
         </Stack>
 
@@ -106,6 +121,28 @@ export default function ProfileCard() {
             }}>
             Follow
           </Button>
+          <div className="container">
+            <header className="jumbotron">
+              <h3>
+                <strong>{currentUser.username}</strong> Profile
+              </h3>
+            </header>
+            <p>
+              <strong>Token:</strong> {currentUser.accessToken.substring(0, 20)} ...{" "}
+              {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+            </p>
+            <p>
+              <strong>Id:</strong> {currentUser.id}
+            </p>
+            <p>
+              <strong>Email:</strong> {currentUser.email}
+            </p>
+            <strong>Authorities:</strong>
+            <ul>
+              {currentUser.roles &&
+                currentUser.roles.map((role: any, index: any) => <li key={index}>{role}</li>)}
+            </ul>
+          </div>
         </Stack>
       </Box>
     </Center>
