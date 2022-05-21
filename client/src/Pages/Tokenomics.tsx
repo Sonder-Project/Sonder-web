@@ -1,8 +1,13 @@
 import React from 'react'
+import { Container, Text } from '@chakra-ui/react';
 
 function Tokenomics() {
   return (
-    <div>Tokenomics</div>
+    <Container
+      maxW="container.page"
+      py={{ base: 20, md: 28 }}>
+      <Text>Tokenomics</Text>
+    </Container>
   )
 }
 
