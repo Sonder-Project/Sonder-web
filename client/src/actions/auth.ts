@@ -83,7 +83,7 @@ export const login: SubmitHandler<IUserLogin> = data => (dispatch: any) => {
   );
 };
 
-export const logout = () => (dispatch: any) => {
+export const logoutAction = () => (dispatch: any) => {
   authService.logout();
   dispatch({
     type: LOGOUT,

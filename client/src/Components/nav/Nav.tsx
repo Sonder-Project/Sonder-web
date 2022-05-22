@@ -75,18 +75,6 @@ export const Nav: React.FC<{}> = () => {
               <Link to="/profile"><Text fontSize="xl">Profile</Text></Link> :
               <Link to="/login"><Text fontSize="xl">Login</Text></Link>
             }
-            {/* 
-            <NextLink
-              href="https://portal.thirdweb.com"
-              variant="link"
-              color="inherit"
-              fontWeight="inherit"
-              textDecoration={undefined}
-              isExternal
-            >
-              Guides
-            </NextLink>
-  */}
             <Flex
               display={{ base: "none", lg: "flex" }}
               direction="row"
