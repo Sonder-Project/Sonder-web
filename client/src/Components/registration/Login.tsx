@@ -81,8 +81,8 @@ export default function Login(props: any) {
           <form onSubmit={handleSubmit(onSubmit)} >
             <Stack spacing={4}>
               <FormControl id="email" isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" {...register('email')} ref={inputRef} />
+                <FormLabel ref={inputRef}>Email address</FormLabel>
+                <Input type="email" {...register('email')} />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>

@@ -85,8 +85,8 @@ export default function RegisterPage() {
                 <HStack>
                   <Box>
                     <FormControl id="firstName" isRequired>
-                      <FormLabel>First Name</FormLabel>
-                      <Input type="text" {...register('firstName')} ref={inputRef} />
+                      <FormLabel ref={inputRef}>First Name</FormLabel>
+                      <Input type="text" {...register('firstName')} />
                     </FormControl>
                   </Box>
                   <Box>

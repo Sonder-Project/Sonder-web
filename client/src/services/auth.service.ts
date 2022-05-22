@@ -31,7 +31,7 @@ const register: SubmitHandler<IUserRegister> = data => {
 
 // POST & save JWT to local storage
 const login: SubmitHandler<IUserLogin> = data => {
-  return axios.post(API_URL + "signup", data, headers)
+  return axios.post(API_URL + "login", data, headers)
     .then((res) => {
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
