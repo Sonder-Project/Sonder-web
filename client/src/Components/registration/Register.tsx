@@ -20,6 +20,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { useDispatch, useSelector } from "react-redux";
 import { registerAction } from "../../actions/auth";
+import { clearMessage } from "../../actions/message";
+
 
 interface IUser {
   firstName: String;
@@ -28,6 +30,7 @@ interface IUser {
   password: String;
   roles: String;
   active: boolean;
+  username: String;
 }
 
 export default function RegisterPage() {
@@ -43,10 +46,10 @@ export default function RegisterPage() {
   const onSubmit: SubmitHandler<IUser> = data => {
     setSuccessful(false);
 
-    data["roles"] = "USER";
+    //data["roles"] = "ROLE_USER";  // todo 
     data["active"] = true;
     dispatch(registerAction(data))
-      .then(() => {
+      .then((res: any) => {
         setSuccessful(true);
       })
       .catch(() => {
@@ -57,6 +60,8 @@ export default function RegisterPage() {
   useEffect(() => {
     //focus the input element 
     inputRef.current?.focus();
+
+    dispatch(clearMessage());
   }, [])
 
   return (
@@ -80,7 +85,7 @@ export default function RegisterPage() {
           boxShadow={'lg'}
           p={8}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {!successful ?
+            {!successful && (
               <Stack spacing={4}>
                 <HStack>
                   <Box>
@@ -96,6 +101,10 @@ export default function RegisterPage() {
                     </FormControl>
                   </Box>
                 </HStack>
+                <FormControl id="username" isRequired>
+                  <FormLabel>Username</FormLabel>
+                  <Input type="username"  {...register('username')} />
+                </FormControl>
                 <FormControl id="email" isRequired>
                   <FormLabel>Email address</FormLabel>
                   <Input type="email"  {...register('email')} />
@@ -136,15 +145,14 @@ export default function RegisterPage() {
                   </Text>
                 </Stack>
               </Stack>
-              :
-              message && (
-                <div className="form-group">
-                  <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
-                    {message}
-                  </div>
+            )}
+            {message && (
+              <div className="form-group">
+                <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
+                  {message}
                 </div>
-              )
-            }
+              </div>
+            )}
           </form>
         </Box>
       </Stack>

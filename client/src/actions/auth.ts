@@ -20,10 +20,11 @@ interface IUserRegister {
   password: String;
   roles: String;
   active: boolean;
+  username: String;
 }
 
 interface IUserLogin {
-  email: String;
+  username: String;
   password: String;
 }
 
@@ -32,6 +33,9 @@ export const registerAction: SubmitHandler<IUserRegister> = data => (dispatch: a
     (res: any) => {
       dispatch({
         type: REGISTER_SUCCESS,
+      });
+      dispatch({
+        type: SET_MESSAGE,
         payload: res.data.message,
       });
       return Promise.resolve();
@@ -60,7 +64,7 @@ export const login: SubmitHandler<IUserLogin> = data => (dispatch: any) => {
     (res: any) => {
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res,
+        payload: { user: res },
       });
       return Promise.resolve();
     },

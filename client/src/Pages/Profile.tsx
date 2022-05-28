@@ -2,6 +2,7 @@ import { Container } from '@chakra-ui/react';
 import React from 'react'
 
 import ProfileCard from '../Components/profile/ProfileCard';
+import Logout from '../helpers/Logout';
 
 function Profile() {
   return (
@@ -10,6 +11,7 @@ function Profile() {
         py={["0px", "0px", "100px"]}
       >
         <ProfileCard />
+        <Logout />
       </Container>
 
     </>

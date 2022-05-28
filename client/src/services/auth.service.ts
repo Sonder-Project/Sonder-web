@@ -10,10 +10,11 @@ interface IUserRegister {
   password: String;
   roles: String;
   active: boolean;
+  username: String;
 }
 
 interface IUserLogin {
-  email: String;
+  username: String;
   password: String;
 }
 
@@ -31,7 +32,7 @@ const register: SubmitHandler<IUserRegister> = data => {
 
 // POST & save JWT to local storage
 const login: SubmitHandler<IUserLogin> = data => {
-  return axios.post(API_URL + "login", data, headers)
+  return axios.post(API_URL + "signin", data, headers)
     .then((res) => {
       if (res.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -51,39 +52,3 @@ export default {
   logout
 };
 
-
-
-// JAVASCRIPT VERSION IN CASE SOMETHING GOES WRONG HAHA
-// const register = (username, email, password) => {
-//   return axios.post(API_URL + "signup", {
-//     username,
-//     email,
-//     password,
-//   });
-// };
-
-
-// // POST & save JWT to local storage
-// const login = (username, password) => {
-//   return axios.post(API_URL + "signin", {
-//     username,
-//     password,
-//   })
-//     .then((res) => {
-//       if (res.data.accessToken) {
-//         localStorage.setItem("user", JSON.stringify(res.data));
-//       }
-//       return res.data;
-//     });
-// };
-
-// // remove JWT from local storage
-// const logout = () => {
-//   localStorage.removeItem("user");
-// };
-
-// export default {
-//   register,
-//   login,
-//   logout
-// };

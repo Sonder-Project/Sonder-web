@@ -12,16 +12,15 @@ import {
 } from '@chakra-ui/react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 
 export default function ProfileCard() {
   const { user: currentUser } = useSelector((state: any) => state.auth);
-  console.log("current!!!!", currentUser);
 
   const color1 = useColorModeValue('white', 'gray.900');
   const color2 = useColorModeValue('gray.700', 'gray.400');
   const color3 = useColorModeValue('gray.50', 'gray.800');
-
 
   if (!currentUser) {
     return <Navigate to="/login" />;

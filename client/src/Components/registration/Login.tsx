@@ -16,12 +16,13 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { login } from "../../actions/auth";
+import { clearMessage } from "../../actions/message";
 
 
 interface IUser {
-  email: String;
+  username: String;
   password: String;
 }
 
@@ -38,13 +39,14 @@ export default function Login(props: any) {
   const inputRef = useRef<any>();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IUser>();
 
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<IUser> = data => {
     setLoading(true);
 
     dispatch(login(data))
       .then(() => {
-        props.history.push("/profile");
-        window.location.reload();
+        navigate("/profile");
       })
       .catch(() => {
         setLoading(false);
@@ -55,6 +57,7 @@ export default function Login(props: any) {
   useEffect(() => {
     //focus the input element 
     inputRef.current?.focus();
+    dispatch(clearMessage());
   }, [])
 
   if (isLoggedIn) {
@@ -80,9 +83,9 @@ export default function Login(props: any) {
           p={8}>
           <form onSubmit={handleSubmit(onSubmit)} >
             <Stack spacing={4}>
-              <FormControl id="email" isRequired>
-                <FormLabel ref={inputRef}>Email address</FormLabel>
-                <Input type="email" {...register('email')} />
+              <FormControl id="username" isRequired>
+                <FormLabel ref={inputRef}>Username</FormLabel>
+                <Input type="username" {...register('username')} />
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
